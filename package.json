@@ -1,0 +1,29 @@
+{
+  "name": "tslint-bamboo-formatter",
+  "version": "0.0.1",
+  "description": "custom formatter for bamboo and typescript files",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gerasimov94/tslint-bamboo-formatter.git"
+  },
+  "keywords": [
+    "tslint",
+    "bamboo",
+    "formatter"
+  ],
+  "author": "Alexey Gerasimov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Gerasimov94/tslint-bamboo-formatter/issues"
+  },
+  "homepage": "https://github.com/Gerasimov94/tslint-bamboo-formatter#readme",
+  "devDependencies": {
+    "chalk": "^3.0.0",
+    "log-symbols": "^3.0.0",
+    "tslint": "^6.0.0"
+  }
+}
