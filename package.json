@@ -1,10 +1,12 @@
 {
   "name": "tslint-bamboo-formatter",
   "version": "0.0.1",
-  "description": "custom formatter for bamboo and typescript files",
+  "description": "Custom formatter for bamboo and typescript files",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "tslint -c tslint.json -s formatters -t bamboo index.ts",
+    "lint:grouped": "tslint -s formatters -t bamboo index.ts"
   },
   "repository": {
     "type": "git",
@@ -21,9 +23,14 @@
     "url": "https://github.com/Gerasimov94/tslint-bamboo-formatter/issues"
   },
   "homepage": "https://github.com/Gerasimov94/tslint-bamboo-formatter#readme",
+  "peerDependencies": {
+    "tslint": "6.0.0"
+  },
   "devDependencies": {
-    "chalk": "^3.0.0",
-    "log-symbols": "^3.0.0",
-    "tslint": "^6.0.0"
+    "@types/node": "^13.5.0",
+    "chalk": "3.0.0",
+    "log-symbols": "3.0.0",
+    "tslint": "6.0.0",
+    "typescript": "3.7.5"
   }
 }
