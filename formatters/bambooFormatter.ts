@@ -1,70 +1,91 @@
 import * as Lint from "tslint";
-const chalk = require('chalk');
+import * as fs from 'fs';
+import * as path from 'path';
+import {IOutputFile, IFailure} from './bambooFormatterTypes';
+
+const outputFileName = 'tslint-results.json'
+const silent = false;
 
 class IssueGroup {
 	public failures: Lint.RuleFailure[] = [];
   
-	constructor(public filename: string) {
-	  this.failures = [];
+	constructor(public issue: Lint.RuleFailure) {
+	  this.failures = [issue];
 	}
   
-	add(failure: Lint.RuleFailure): void {
+	public set add(failure: Lint.RuleFailure) {
 	  this.failures.push(failure);
 	}
-  
-	public get warningCount(): number {
-	  return this.getIssueCount('warning');
-	}
-  
-	public get errorCount(): number {
-	  return this.getIssueCount('error');
-	}
-  
-	public get fixCount(): number {
-	  return this.failures.reduce(
-		(count, failure) => (failure.hasFix() ? count + 1 : count),
-		0
-	  );
-	}
-  
-	private getIssueCount(severity: Lint.RuleSeverity): number {
-	  return this.failures.reduce(
-		(count, failure) =>
-		  failure.getRuleSeverity() === severity ? count + 1 : count,
-		0
-	  );
-	}
-}
 
-type TFilesHash<T = Lint.RuleFailure> = {
-	[key: string]: T[];
+	public get getFaltures() {
+		return this.failures;
+	}
 }
 
 export class Formatter extends Lint.Formatters.AbstractFormatter {
-	public filesHash: TFilesHash = {}
+	static metadata: Lint.IFormatterMetadata = {
+		formatterName: 'tslint-bamboo-formatter',
+		description: 'Formats errors as bamboo compatible JSON.',
+		sample: '',
+		consumer: 'human'
+	};
 
     public format(failures: Lint.RuleFailure[]): string {
+		const errors = failures.filter(falture => falture.getRuleSeverity() === 'error');
 
-		chalk.blue(failures)
-		const failuresJSON = failures.reduce((memo, failure: Lint.RuleFailure) => {
-			let elemsByKey = memo[failure.getFileName()];
+		let output: IOutputFile = {
+			stats: {
+				tests: 0,
+				passes: 0,
+				failures: errors.length,
+				duration: 0,
+				start: new global.Date(),
+				end: new global.Date(),
+			},
+			failures: [],
+			passes: [],
+			skipped: [],
+		};
 
-			chalk.blue(failure)
-			if (elemsByKey) {
-				elemsByKey = elemsByKey.concat(failure);
+		const failuresJSON = errors.reduce((memo: {[key: string]: IssueGroup}, failure: Lint.RuleFailure) => {
+			let issueGroup = memo[failure.getFileName()];
+
+			if (issueGroup) {
+					issueGroup.add = failure;
 			} else {
-				elemsByKey = [];
+				memo = {
+					...memo,
+					[failure.getFileName()]: new IssueGroup(failure)
+				}
 			}
 
 			return memo;
-		}, this.filesHash);
+		}, {});
 
-		
+		output.failures = Object.values(failuresJSON).reduce((memo: IFailure[], item: IssueGroup) => memo = ([
+			...memo,
+			...item.getFaltures.map((failure: Lint.RuleFailure) => {
+				const fileName = (failure.getFileName() || '').match('(?<=/)[^/]+$');
 
-        return JSON.stringify(failuresJSON);
+				return ({
+					title: fileName ? fileName[0] : '',
+					fullTitle: path.resolve(failure.getFileName()),
+					duration: 0,
+					errorCount: errors.length,
+					error: failure.getFailure(),
+				});
+			}),
+		]), []);
+
+		const stringifiedOutput = JSON.stringify(output);
+
+		this.writeFile(stringifiedOutput)
+
+		return silent ? '' : stringifiedOutput;
 	}
 	
-	private writeFile() {
-
+	private writeFile(file: string) {
+		if (fs.existsSync(outputFileName)) fs.unlinkSync(outputFileName);
+		fs.appendFileSync(outputFileName, file)
 	}
 }
