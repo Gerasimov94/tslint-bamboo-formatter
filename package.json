@@ -1,6 +1,6 @@
 {
   "name": "tslint-bamboo-formatter",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Custom formatter for bamboo and typescript files",
   "main": "formatters/bambooFormatter.js",
   "scripts": {
