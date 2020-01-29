@@ -1,11 +1,12 @@
 {
 	"rules": {
 		"indent": [true, "tabs", 4],
-		"quotemark": false,
 		"ordered-imports": false,
-		"no-shadowed-variable": false,
+		"no-shadowed-variable": true,
 		"member-access": false,
+		"quotemark": [true, "single"],
 		"arrow-parens": false,
+		"no-trailing-whitespace": true,
 		"max-line-length": {
 			"options": [120]
 		},

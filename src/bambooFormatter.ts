@@ -1,20 +1,19 @@
-import * as Lint from "tslint";
+import * as Lint from 'tslint';
 import * as fs from 'fs';
 import * as path from 'path';
-import {IOutputFile, IFailure} from './bambooFormatterTypes';
+import { IOutputFile, IFailure } from './bambooFormatterTypes';
 
-const outputFileName = 'tslint-results.json'
-const silent = false;
+const outputFileName = 'tslint-results.json';
 
 class IssueGroup {
 	public failures: Lint.RuleFailure[] = [];
-  
+
 	constructor(public issue: Lint.RuleFailure) {
-	  this.failures = [issue];
+		this.failures = [issue];
 	}
-  
+
 	public set add(failure: Lint.RuleFailure) {
-	  this.failures.push(failure);
+		this.failures.push(failure);
 	}
 
 	public get getFaltures() {
@@ -27,13 +26,13 @@ export class Formatter extends Lint.Formatters.AbstractFormatter {
 		formatterName: 'tslint-bamboo-formatter',
 		description: 'Formats errors as bamboo compatible JSON.',
 		sample: '',
-		consumer: 'human'
+		consumer: 'human',
 	};
 
-    public format(failures: Lint.RuleFailure[]): string {
+	public format(failures: Lint.RuleFailure[]): string {
 		const errors = failures.filter(falture => falture.getRuleSeverity() === 'error');
 
-		let output: IOutputFile = {
+		const output: IOutputFile = {
 			stats: {
 				tests: 0,
 				passes: 0,
@@ -55,8 +54,8 @@ export class Formatter extends Lint.Formatters.AbstractFormatter {
 			} else {
 				memo = {
 					...memo,
-					[failure.getFileName()]: new IssueGroup(failure)
-				}
+					[failure.getFileName()]: new IssueGroup(failure),
+				};
 			}
 
 			return memo;
@@ -79,13 +78,15 @@ export class Formatter extends Lint.Formatters.AbstractFormatter {
 
 		const stringifiedOutput = JSON.stringify(output);
 
-		this.writeFile(stringifiedOutput)
+		this.writeFile(stringifiedOutput);
 
-		return silent ? '' : stringifiedOutput;
+		return stringifiedOutput;
+
 	}
-	
+
 	private writeFile(file: string) {
 		if (fs.existsSync(outputFileName)) fs.unlinkSync(outputFileName);
-		fs.appendFileSync(outputFileName, file)
+
+		fs.appendFileSync(outputFileName, file);
 	}
 }

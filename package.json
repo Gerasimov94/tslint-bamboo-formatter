@@ -2,11 +2,10 @@
   "name": "tslint-bamboo-formatter",
   "version": "0.0.1",
   "description": "Custom formatter for bamboo and typescript files",
-  "main": "index.js",
+  "main": "formatters/bambooFormatter.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "tslint -c tslint.json -s formatters -t bamboo index.ts",
-    "lint:grouped": "tslint -s formatters -t bamboo OUTPUT_FILE_NAME=shit.json silent"
+    "lint": "tslint -c tslint.json -s lib -t bamboo src/*.ts"
   },
   "repository": {
     "type": "git",
@@ -30,5 +29,8 @@
     "@types/node": "13.5.0",
     "tslint": "6.0.0",
     "typescript": "3.7.5"
+  },
+  "directories": {
+    "formatters": "formatters"
   }
 }
