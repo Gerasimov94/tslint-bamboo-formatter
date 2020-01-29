@@ -70,7 +70,7 @@ export class Formatter extends Lint.Formatters.AbstractFormatter {
 					title: fileName ? fileName[0] : '',
 					fullTitle: path.resolve(failure.getFileName()),
 					duration: 0,
-					errorCount: errors.length,
+					errorCount: 1,
 					error: failure.getFailure(),
 				});
 			}),
@@ -88,5 +88,7 @@ export class Formatter extends Lint.Formatters.AbstractFormatter {
 		if (fs.existsSync(outputFileName)) fs.unlinkSync(outputFileName);
 
 		fs.appendFileSync(outputFileName, file);
+
+		process.exit(0); // because formatters made by maintainer of tslint don't works as must to work
 	}
 }

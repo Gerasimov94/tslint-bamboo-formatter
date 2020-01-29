@@ -35,7 +35,6 @@ var Lint = require("tslint");
 var fs = require("fs");
 var path = require("path");
 var outputFileName = 'tslint-results.json';
-var silent = false;
 var IssueGroup = /** @class */ (function () {
     function IssueGroup(issue) {
         this.issue = issue;
@@ -95,18 +94,19 @@ var Formatter = /** @class */ (function (_super) {
                 title: fileName ? fileName[0] : '',
                 fullTitle: path.resolve(failure.getFileName()),
                 duration: 0,
-                errorCount: errors.length,
+                errorCount: 1,
                 error: failure.getFailure(),
             });
         }))); }, []);
         var stringifiedOutput = JSON.stringify(output);
         this.writeFile(stringifiedOutput);
-        return silent ? '' : stringifiedOutput;
+        return stringifiedOutput;
     };
     Formatter.prototype.writeFile = function (file) {
         if (fs.existsSync(outputFileName))
             fs.unlinkSync(outputFileName);
         fs.appendFileSync(outputFileName, file);
+        process.exit(0);
     };
     Formatter.metadata = {
         formatterName: 'tslint-bamboo-formatter',
