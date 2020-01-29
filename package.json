@@ -4,6 +4,7 @@
   "description": "Custom formatter for bamboo and typescript files",
   "main": "formatters/bambooFormatter.js",
   "scripts": {
+	"prepublish": "tsc --build tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "tslint -c tslint.json -s formatters -t bamboo index.ts"
   },
