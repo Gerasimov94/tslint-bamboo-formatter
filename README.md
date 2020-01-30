@@ -11,7 +11,7 @@ npx tsc
 
 ## Installation
 
-Use the [npm](https://www.npmjs.com/package/tslint-bamboo-formatter) package manager to install tslint-bamboo-formatter.
+Use the [npm](https://docs.npmjs.com/about-npm/) package manager to install tslint-bamboo-formatter.
 
 ```bash
 npm install --save-dev tslint-bamboo-formatter
