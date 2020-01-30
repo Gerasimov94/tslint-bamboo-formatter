@@ -74,8 +74,8 @@ export class Formatter extends Lint.Formatters.AbstractFormatter {
 			...memo,
 			...item.getFaltures.map((failure: Lint.RuleFailure) => {
 				const fileName = (failure.getFileName() || '').match('(?<=/)[^/]+$');
-				const relativePath = failure.getFileName().match('src/(.*)');
-				const filePath = relativePath ? path.resolve(relativePath[0]) : '';
+				const relativePath = path.resolve(failure.getFileName()).match('src/(.*)');
+				const filePath = relativePath ? relativePath[0] : '';
 				const failurePosition = failure.getStartPosition().getPosition();
 				const lineAndCharacter = failure.getStartPosition().getLineAndCharacter();
 				const positionTuple = `${lineAndCharacter.line + 1}:${lineAndCharacter.character + 1}`;
