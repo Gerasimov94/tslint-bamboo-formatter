@@ -3,7 +3,7 @@
 tslint-bamboo-formatter is a Typescript library for creating JSON output files, which are used by Bamboo for logs.
 
 ## Building
-If you want to generate formatter (e.g. `bambooFormatter.js`), use command below:
+If you want to generate formatter (e.g. `bambooFormatter.js`), use command below (works with [npm](https://github.com/npm/npm/releases/tag/v5.2.0) version 5.2.0 and higher):
 
 ```bash
 npx tsc
@@ -11,7 +11,7 @@ npx tsc
 
 ## Installation
 
-Use the [npm](https://www.npmjs.com/package/tslint-bamboo-formatter) package manager to install tslint-bamboo-formatter.
+Use the [npm](https://docs.npmjs.com/about-npm/) package manager to install tslint-bamboo-formatter.
 
 ```bash
 npm install --save-dev tslint-bamboo-formatter
