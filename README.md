@@ -1,5 +1,7 @@
 # tslint-bamboo-formatter
 
+[![npm version](https://badge.fury.io/js/tslint-bamboo-formatter.svg)](https://badge.fury.io/js/tslint-bamboo-formatter)
+
 tslint-bamboo-formatter is a Typescript library for creating JSON output files, which are used by Bamboo for logs.
 
 ## Building
