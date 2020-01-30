@@ -34,15 +34,24 @@ export class Formatter extends Lint.Formatters.AbstractFormatter {
 
 		const output: IOutputFile = {
 			stats: {
-				tests: 0,
-				passes: 0,
+				tests: 1 + errors.length, // watchdog + failures
+				passes: 1,
 				failures: errors.length,
 				duration: 0,
 				start: new global.Date(),
 				end: new global.Date(),
 			},
 			failures: [],
-			passes: [],
+			passes: [
+				{
+					// The underlying issue is that Bamboo expects the job to return a set of tests 
+					// that either pass or fail, but tslint outputs nothing if a file passes.
+					"title": "Watchdog",
+					"fullTitle": "Test that provides successful Mocha Test Parser execution",
+					"duration": 0,
+					"errorCount": 0
+				},
+			],
 			skipped: [],
 		};
 
@@ -65,18 +74,35 @@ export class Formatter extends Lint.Formatters.AbstractFormatter {
 			...memo,
 			...item.getFaltures.map((failure: Lint.RuleFailure) => {
 				const fileName = (failure.getFileName() || '').match('(?<=/)[^/]+$');
+				const filePath = path.resolve(failure.getFileName()).match("src/(.*)")[0];
+				const failurePosition = failure.getStartPosition().getPosition();
+				const lineAndCharacter = failure.getStartPosition().getLineAndCharacter();
+				const positionTuple = `${lineAndCharacter.line + 1}:${lineAndCharacter.character + 1}`;
 
 				return ({
-					title: fileName ? fileName[0] : '',
-					fullTitle: path.resolve(failure.getFileName()),
+					// structure:
+					// TODO move to readme
+					// https://bitbucket.org/atlassian/bamboo-nodejs-plugin/src/bfde4b1a1931c11f3328206891b9bf3f0b0575fe/src/main/java/com/atlassian/bamboo/plugins/nodejs/tasks/mocha/parser/MochaSuiteTest.java?at=master#lines-9
+					// e.g. :
+					// 		"title": "getBackendLocalesOptions:707", // Must be uniq per error
+					//		"fullTitle": "semicolon",
+					// 		"duration": 0,
+					// 		"errorCount": 1,
+					// 		"error": "src/js/app/getBackendLocalesOptions.ts:24:19 - Missing semicolon"
+					// 
+					// Title requires split because of Bamboo-specific name parser, which cut it by dot
+					title: fileName ? fileName[0].split(".")[0] + ":" + failurePosition : '',
+					fullTitle: failure.getRuleName(),
 					duration: 0,
 					errorCount: 1,
-					error: failure.getFailure(),
+					error: `${filePath}:${positionTuple}` + " - " + failure.getFailure()
 				});
 			}),
 		]), []);
-
-		const stringifiedOutput = JSON.stringify(output);
+		
+		// We need prettified JSON output for correct parser results,
+		// so indent is set to 2.
+		const stringifiedOutput = JSON.stringify(output, null, 2);
 
 		this.writeFile(stringifiedOutput);
 
@@ -89,6 +115,6 @@ export class Formatter extends Lint.Formatters.AbstractFormatter {
 
 		fs.appendFileSync(outputFileName, file);
 
-		process.exit(0); // because formatters made by maintainer of tslint don't works as must to work
+		process.exit(0); // because formatters made by the maintainers of tslint don't work as they should.
 	}
 }
