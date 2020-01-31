@@ -1,19 +1,18 @@
-
 {
 	"compilerOptions": {
-	  "module": "commonjs",
-	  "target": "ES5",
-	  "outDir": "formatters",
-	  "lib": [
-		"ES6"
-	  ],
-	  "strict": true,
-	  "types": ["node"],
-	  "skipLibCheck": true,
+		"module": "commonjs",
+		"target": "ES5",
+		"outDir": "formatters",
+		"lib": [
+			"ES6"
+	 	],
+		"strict": true,
+		"types": ["node"],
+		"skipLibCheck": true,
 	},
 	"exclude": ["node_modules"],
 	"include": ["src/*.ts"],
 	"files": [
-	  "src/bambooFormatter.ts",
+		"src/bambooFormatter.ts",
 	]
 }

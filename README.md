@@ -44,12 +44,12 @@ Add this script to the `scripts` section of your package.json.
 
 ```js
 module.exports = {
-...,
+  ...,
   tslint: {
     formattersDirectory: 'node_modules/tslint-bamboo-formatter/formatters/',
     formatter: 'bambooFormatter.ts'
   }
-]
+}
 
 ```
 
