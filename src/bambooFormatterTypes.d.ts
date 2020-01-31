@@ -18,9 +18,9 @@ export interface IOutputFile {
 	failures: Array<IFailure>;
 	passes: Array<{
 		title: string;
-      	fullTitle: string;
-      	duration: number;
-      	errorCount: number;
+		fullTitle: string;
+		duration: number;
+		errorCount: number;
 	}>;
 	skipped: Array<{}>;
 }
